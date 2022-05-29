@@ -5,7 +5,7 @@ const MongoClient = require('mongodb').MongoClient
 
 app.set('view engine', 'ejs')
 
-MongoClient.connect('mongodb+srv://cthe12:qwerty1@cluster0.zwbyvsn.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true })
+MongoClient.connect('mongodb+srv://username:password@cluster0.zwbyvsn.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true })
 .then(client => {
   console.log('Connected to Database')
   const db = client.db('star-wars-quotes')
