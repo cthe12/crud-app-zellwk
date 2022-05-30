@@ -1,6 +1,6 @@
-app.use(express.static('public'))
 
 const update = document.querySelector('#update-button')
+const messageDiv = document.querySelector('#message')
 
 update.addEventListener('click', _ => {
     fetch('/quotes', {
@@ -26,8 +26,13 @@ update.addEventListener('click', _ => {
       .then(res => {
         if (res.ok) return res.json()
       })
-      .then(data => {
-        window.location.reload()
+      .then(response => {
+        if (response === 'No quote to delete') {
+          messageDiv.textContent = 'No Darth Vadar quote to delete'
+        } else {
+          window.location.reload(true)
+        }
       })
+      .catch(console.error)
   })
   

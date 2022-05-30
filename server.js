@@ -3,14 +3,17 @@ const bodyParser = require('body-parser')
 const app = express()
 const MongoClient = require('mongodb').MongoClient
 
-app.set('view engine', 'ejs')
 
 MongoClient.connect('mongodb+srv://username:password@cluster0.zwbyvsn.mongodb.net/?retryWrites=true&w=majority', { useUnifiedTopology: true })
 .then(client => {
   console.log('Connected to Database')
   const db = client.db('star-wars-quotes')
   const quotesCollection = db.collection('quotes')  
+
+  app.set('view engine', 'ejs')
+  app.use(express.static('public'))
   app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(bodyParser.json())
 
   app.get('/', (req, res) => {
     db.collection('quotes').find().toArray()
@@ -33,7 +36,6 @@ MongoClient.connect('mongodb+srv://username:password@cluster0.zwbyvsn.mongodb.ne
 })
 .catch(console.error)
 
-app.use(bodyParser.json())
   app.put('/quotes', (req, res) => {
     quotesCollection.findOneAndUpdate(
         { name: 'mary' },
@@ -51,7 +53,7 @@ app.use(bodyParser.json())
         .catch(error => console.error(error))
   })
   app.delete('/quotes', (req, res) => {
-    quotesCollection.deleteOne(/* ... */)
+    quotesCollection.deleteOne({ name: req.body.name })
     .then(result => {
       if (result.deletedCount === 0) {
         return res.json('No quote to delete')
